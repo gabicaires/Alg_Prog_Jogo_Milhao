@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <ctype.h>
 
+#define MAX_ERROS 3            // NÃºmero mÃ¡ximo de erros que o jogador pode cometer
+#define MAX_NIVEIS 5           // NÃºmero total de nÃ­veis no jogo
+#define PERGUNTAS_POR_NIVEL 3  // NÃºmero de perguntas por nÃ­vel
 
-#define MAX_ERROS 3            // Número máximo de erros que o jogador pode cometer
-#define MAX_NIVEIS 5           // Número total de níveis no jogo
-#define PERGUNTAS_POR_NIVEL 3  // Número de perguntas por nível
-
-// Matriz de perguntas, onde cada nível contém um conjunto de perguntas
+// Matriz de perguntas, onde cada nÃ­vel contÃ©m um conjunto de perguntas
 char* perguntas[MAX_NIVEIS][PERGUNTAS_POR_NIVEL] = {
     {
         "Qual e o tamanho de uma variavel do tipo int em C?\nA) 1 byte\nB) 2 bytes\nC) 4 bytes\nD) 8 bytes",
@@ -22,7 +22,7 @@ char* perguntas[MAX_NIVEIS][PERGUNTAS_POR_NIVEL] = {
     {
         "Qual operador representa OU logico?\nA) &&\nB) ||\nC) !\nD) &",
         "Como se chama um laco que sempre executa pelo menos uma vez?\nA) for\nB) do-while\nC) while\nD) if",
-        "O que e um Enum em C?\nA) Um comando que encerra um programa imediatamente.\nB) Um tipo de laço de repetição com condição no final.\nC) E um mapeamento de valores interios\nD)  Um operador que compara dois valores diferentes."
+        "O que e um Enum em C?\nA) Um comando que encerra um programa imediatamente.\nB) Um tipo de laÃ§o de repetiÃ§Ã£o com condiÃ§Ã£o no final.\nC) E um mapeamento de valores interios\nD)  Um operador que compara dois valores diferentes."
     },
     {
         "Qual o significado de Union em C?\nA)Uma funcao que une dois arrays em um so\nB) E um tipo que pode representar dados de tipos diferentes\nC) Uma biblioteca externa para unir variaveis\nD) Um operador logico utilizado para unir condicoes",
@@ -32,11 +32,11 @@ char* perguntas[MAX_NIVEIS][PERGUNTAS_POR_NIVEL] = {
     {
         "Qual e o resultado de 10 / 3 em C?\nA) 3.33\nB) 3\nC) 3.0\nD) erro",
         "Qual e a finalidade do operador sizeof?\nA) Comparar\nB) Alocar\nC) Medir tamanho\nD) Somar",
-        "Qual o significado de Structs?\nA) Um tipo de dado que permite repetir blocos de código.\nB) Um comando usado para imprimir valores na tela.\nC) Uma estrutura de controle condicional como if ou switch.\nD) Colecao de dado de tipos diferentes"
+        "Qual o significado de Structs?\nA) Um tipo de dado que permite repetir blocos de cÃ³digo.\nB) Um comando usado para imprimir valores na tela.\nC) Uma estrutura de controle condicional como if ou switch.\nD) Colecao de dado de tipos diferentes"
     }
 };
 
-// Matriz de respostas corretas, onde cada nível contém as respostas para as perguntas correspondentes
+// Matriz de respostas corretas, onde cada nÃ­vel contÃ©m as respostas para as perguntas correspondentes
 char respostas[MAX_NIVEIS][PERGUNTAS_POR_NIVEL] = {
     {'C', 'A', 'A'},  
     {'A', 'B', 'A'},  
@@ -58,18 +58,25 @@ int main() {
     printf("\nBem-vindo ao Jogo de Perguntas de Algoritmos!\n");
     printf("Responda corretamente para avancar de nivel. 3 erros e o jogo acaba.\n\n");
 
-    // Laço que controla o andamento do jogo
+    // LaÃ§o que controla o andamento do jogo
     while (nivel < MAX_NIVEIS && erros < MAX_ERROS) {
         perguntaIndex = rand() % PERGUNTAS_POR_NIVEL; 
 
         printf("Nivel %d:\n", nivel + 1);  
         printf("%s\n", perguntas[nivel][perguntaIndex]);  
-        printf("Sua resposta: ");
-        scanf(" %c", &resposta);  
+        do{
+            printf("Sua resposta: ");
+            scanf(" %c", &resposta);
+            fflush(stdin);
+            resposta = toupper(resposta);
 
-        fflush(stdin);
+            if(resposta != 'A' && resposta != 'B' && resposta != 'C' && resposta != 'D'){
+                printf("Resposta invalida! Por favor digite: A, B, C ou D.\n");
+            }  
+        }while(
+            resposta != 'A' && resposta != 'B' && resposta != 'C' && resposta != 'D');        
 
-        // Verifica se a resposta do jogador está correta (considerando maiúsculas ou minúsculas)
+        // Verifica se a resposta do jogador estÃ¡ correta (considerando maiÃºsculas ou minÃºsculas)
         if (resposta == respostas[nivel][perguntaIndex] || resposta == respostas[nivel][perguntaIndex] + 32) {
             printf("Correto!\n\n");
             nivel++;  
